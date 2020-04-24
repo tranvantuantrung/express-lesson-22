@@ -1,0 +1,12 @@
+extends ../layouts/common
+
+block content
+  .container.pt-5
+    h2 Update cover
+    
+    form(action="/books/update", method="POST", enctype="multipart/form-data")
+      .form-group
+        lable New cover:
+        input(type="hidden", name="id", value=id)
+        input.form-control-file(type="file", name="coverUrl")
+      button.btn.btn-success Update

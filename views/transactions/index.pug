@@ -1,0 +1,55 @@
+extends ../layouts/common
+
+block content
+  .container.pt-5
+    h2 Transaction
+    
+    table.table.table-bordered.my-3
+      tr
+        th Book title
+        th Brrower
+        th Is complete
+        th.text-center Action
+      each transaction in transactions
+        tr
+          td= transaction.bookTitle
+          td= transaction.userName
+          td= transaction.isComplete ? transaction.isComplete : "False"
+          td.text-center
+            a.btn.btn-info(href="/transactions/" + transaction.id +"/complete") Complete
+    
+    nav.mt-3
+      ul.pagination.justify-content-center
+        li.page-item
+            a.page-link(href='/transactions?page=1') First
+        li.page-item(class= page === 1 ? 'disabled' : '')
+          a.page-link(href='/transactions?page=' + (page - 1)) &laquo
+        if (page === 1 || page === 2) 
+          - for (let i = 1; i <= 3; i++)
+            li.page-item(class= page === i ? 'active' : '')
+              a.page-link(href='/transactions?page=' + i)= i
+        else if (page == lengthPage -1 || page == lengthPage)
+          - for (let i = 2; i >= 0; i--)
+            li.page-item(class= page === (lengthPage - i) ? 'active' : '')
+              a.page-link(href='/transactions?page=' + (lengthPage - i))= lengthPage - i
+        else      
+          - for (let i = page - 1; i <= page + 1; i++)
+              li.page-item(class= page === i ? 'active' : '')
+                a.page-link(href='/transactions?page=' + i)= i
+        li.page-item(class= page === lengthPage ? 'disabled' : '')
+          a.page-link(href='/transactions?page=' + (page + 1)) &raquo
+        li.page-item
+            a.page-link(href='/transactions?page=' + lengthPage) Last
+    
+    form(method="POST")
+      .form-group
+        lable Book title:
+        select.form-control(name="bookId", style="width:350px")
+          each book in books
+            option(value=book.id)= book.title
+        lable User name:
+        select.form-control(name="userId", style="width:350px")
+          each user in users
+            option(value=user.id)= user.name
+      button.btn.btn-success create
+  

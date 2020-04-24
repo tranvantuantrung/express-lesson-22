@@ -1,0 +1,65 @@
+extends ../layouts/common
+
+block content
+  .container.pt-5
+    h1 User list
+    
+    table.table.table-bordered.my-3
+      tr
+        th Avatar
+        th User name
+        th.text-center(colspan="2") Action
+      each user in users
+        tr
+          td
+            if user.avatar
+              img.rounded(src= user.avatar width="64" height="64")
+            else
+              img.rounded(src="https://res.cloudinary.com/dkh65bchm/image/upload/v1587707855/defalut_bibumt.jpg" width="64" height="64")
+          td= user.name
+          td.text-center
+            a.btn.btn-info(href="/users/" + user.id + "/update") Update name
+          td.text-center
+            a.btn.btn-danger(href="/users/" + user.id + "/delete") Delete
+    
+    nav.mt-3
+      ul.pagination.justify-content-center
+        li.page-item
+            a.page-link(href='/users?page=1') First
+        li.page-item(class= page === 1 ? 'disabled' : '')
+          a.page-link(href='/users?page=' + (page - 1)) &laquo
+        if (page === 1 || page === 2) 
+          - for (let i = 1; i <= 3; i++)
+            li.page-item(class= page === i ? 'active' : '')
+              a.page-link(href='/users?page=' + i)= i
+        else if (page == lengthPage -1 || page == lengthPage)
+          - for (let i = 2; i >= 0; i--)
+            li.page-item(class= page === (lengthPage - i) ? 'active' : '')
+              a.page-link(href='/users?page=' + (lengthPage - i))= lengthPage - i
+        else      
+          - for (let i = page - 1; i <= page + 1; i++)
+              li.page-item(class= page === i ? 'active' : '')
+                a.page-link(href='/users?page=' + i)= i
+        li.page-item(class= page === lengthPage ? 'disabled' : '')
+          a.page-link(href='/users?page=' + (page + 1)) &raquo
+        li.page-item
+            a.page-link(href='/users?page=' + lengthPage) Last
+        
+    
+    h3 Add user
+    
+    if errors
+      each error in errors
+        .alert.alert-danger(style="width:350px")= error
+    
+    form(method="POST")
+      .form-group
+        lable name:
+        input.form-control(type="text", name="name", style="width:350px", value= values ? values.name : '')
+      .form-group
+        label Email: 
+        input.form-control(type="text" name="email", style="width:350px", value=values ? values.email : '')
+      .form-group
+        label Password: 
+        input.form-control(type="password" name="password", style="width:350px", value=values ? values.password : '')
+      button.btn.btn-success Create
